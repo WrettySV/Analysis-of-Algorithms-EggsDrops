@@ -41,35 +41,17 @@ public class EggsDrop {
     }
 
     public int criticalFloor2() {
-            /*
         int lo = 1;
         int hi = numberOfFloors;
         int mid = lo;
         while (lo <= hi) {
             mid = 1 + (hi - lo) / 2;
             if (isEggBreaked(mid)) {//egg breaks
-                if (lo == hi) break;
                 hi = mid;
             }
             else if (!isEggBreaked(mid)) lo = mid + 1;//egg does not break
         }
-        return mid;
-
-             */
-        int high = n;
-        int low = 1;
-        int mid = low;
-        while (high >= low) {
-            mid = (high + low) >>> 1;
-            if (!test(mid, t)) {
-                if (high == low) break;
-                high = mid;
-            }
-            else if (test(mid, t)) {
-                low = mid + 1;
-            }
-        }
-        return mid;
+        return mid;        
     }
 
     public static void main(String[] args) {
