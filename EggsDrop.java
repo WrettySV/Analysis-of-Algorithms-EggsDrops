@@ -45,7 +45,7 @@ public class EggsDrop {
         int hi = numberOfFloors;
         int mid = lo;
         while (lo <= hi) {
-            mid = 1 + (hi - lo) / 2;
+            mid = lo + (hi - lo) / 2;
             if (isEggBreaked(mid)) {//egg breaks
                 hi = mid;
             }
