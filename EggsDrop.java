@@ -19,20 +19,20 @@
 import edu.princeton.cs.algs4.StdOut;
 
 public class EggsDrop {
-    private int critFloor;
-    private int numberOfFloors;
+    private long critFloor;
+    private long numberOfFloors;
 
-    public EggsDrop(int n, int T) {
+    public EggsDrop(long n, long T) {
         this.critFloor = T;
         this.numberOfFloors = n;
     }
 
-    public boolean isEggBreaked(int floor) {
+    public boolean isEggBreaked(long floor) {
         return floor >= critFloor;//egg breaks
     }
 
-    public int criticalFloor1() {
-        int i = 1;
+    public long criticalFloor1() {
+        long i = 1;
         while (i <= numberOfFloors) {
             if (isEggBreaked(i)) break; //egg breaks
             else i++;
@@ -40,22 +40,25 @@ public class EggsDrop {
         return i;
     }
 
-    public int criticalFloor2() {
-        int lo = 1;
-        int hi = numberOfFloors;
-        int mid = lo;
+    public long criticalFloor2() {
+
+        long lo = 1;
+        long hi = numberOfFloors;
+        long mid = lo;
         while (lo <= hi) {
             mid = lo + (hi - lo) / 2;
             if (isEggBreaked(mid)) {//egg breaks
-                hi = mid;
+                hi = mid; // so as not to exclude the critical floor (not mid-1)
             }
-            else if (!isEggBreaked(mid)) lo = mid + 1;//egg does not break
+            else if (!isEggBreaked(mid)) {
+                lo = mid + 1;//egg does not break
+            }
         }
-        return mid;        
+        return mid;
     }
 
     public static void main(String[] args) {
-        EggsDrop eggdr = new EggsDrop(15, 5);
+        EggsDrop eggdr = new EggsDrop(1000000000, 96314894);
         StdOut.println("version 1: " + eggdr.criticalFloor1());
         StdOut.println("version 2: " + eggdr.criticalFloor2());
     }
