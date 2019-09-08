@@ -21,6 +21,8 @@ import edu.princeton.cs.algs4.StdOut;
 public class EggsDrop {
     private long critFloor;
     private long numberOfFloors;
+    private long numOfTosses;
+    private long numOfBreakedEggs;
 
     public EggsDrop(long n, long T) {
         this.critFloor = T;
@@ -31,24 +33,38 @@ public class EggsDrop {
         return floor >= critFloor;//egg breaks
     }
 
-    public long criticalFloor1() {
+    public long numOfEggs() {
+        return this.numOfBreakedEggs;
+    }
+
+    public long numOfTosses() {
+        return this.numOfTosses;
+    }
+
+    public long criticalFloor0() {
+        this.numOfBreakedEggs = 0;
+        this.numOfTosses = 0;
         long i = 1;
         while (i <= numberOfFloors) {
-            if (isEggBreaked(i)) break; //egg breaks
+            this.numOfTosses += 1;
+            if (isEggBreaked(i)) {
+                this.numOfBreakedEggs += 1;
+                break; //egg breaks
+            }
             else i++;
         }
         return i;
     }
 
-    public long criticalFloor2() {
-
-        long lo = 1;
-        long hi = numberOfFloors;
+    public long bynarySearch(long lo, long hi) {
         long mid = lo;
         while (lo <= hi) {
             mid = lo + (hi - lo) / 2;
+            this.numOfTosses += 1;
             if (isEggBreaked(mid)) {//egg breaks
-                hi = mid; // so as not to exclude the critical floor (not mid-1)
+                this.numOfBreakedEggs += 1;
+                if (hi == lo) break;
+                hi = mid; // so as not to exclude the critical floor
             }
             else if (!isEggBreaked(mid)) {
                 lo = mid + 1;//egg does not break
@@ -57,9 +73,45 @@ public class EggsDrop {
         return mid;
     }
 
+    public long criticalFloor1() {
+        this.numOfBreakedEggs = 0;
+        this.numOfTosses = 0;
+        long lo = 1;
+        long hi = numberOfFloors;
+        return bynarySearch(lo, hi);
+    }
+
+    public long criticalFloor2() {
+        this.numOfBreakedEggs = 0;
+        this.numOfTosses = 0;
+        long i = 1;
+        while (i <= numberOfFloors) {
+            this.numOfTosses += 1;
+            if (isEggBreaked(i)) {
+                this.numOfBreakedEggs += 1;
+                break;
+            }
+            i *= 2;
+            if (i > numberOfFloors) {
+                i = numberOfFloors;
+                break;
+            }
+        }
+        return bynarySearch(i / 2, i); //  i/2<<critFloor << i, i can be numberOfFloors
+    }
+
     public static void main(String[] args) {
-        EggsDrop eggdr = new EggsDrop(1000000000, 96314894);
+        EggsDrop eggdr = new EggsDrop(1000000000, 8475343);
+        StdOut.println("version 0: " + eggdr.criticalFloor0());
+        StdOut.println("number of Breaked Eggs: " + eggdr.numOfEggs());
+        StdOut.println("number of Tosses: " + eggdr.numOfTosses());
         StdOut.println("version 1: " + eggdr.criticalFloor1());
+        StdOut.println("number of Breaked Eggs: " + eggdr.numOfEggs());
+        StdOut.println("number of Tosses: " + eggdr.numOfTosses());
         StdOut.println("version 2: " + eggdr.criticalFloor2());
+        StdOut.println("number of Breaked Eggs: " + eggdr.numOfEggs());
+        StdOut.println("number of Tosses: " + eggdr.numOfTosses());
+
     }
 }
+
